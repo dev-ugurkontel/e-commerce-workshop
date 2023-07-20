@@ -18,7 +18,7 @@ namespace Core.DataAccess.Concrete.EF
         {
                 _db = db;
         }
-
+        
         public List<TEntity> GetAll(Expression<Func<TEntity, bool>>? filter = null)
         {
             return filter == null ? _db.Set<TEntity>().ToList() : _db.Set<TEntity>().Where(filter).ToList();
