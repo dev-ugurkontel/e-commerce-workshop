@@ -36,17 +36,31 @@ namespace Business.Concrete
 
         public IDataResult<CategoryResponse> Get(int id)
         {
-            var getCategory = _categoryRepository.Get(c => c.CategoryId == id);
-            var categoryResponse = new CategoryResponse()
+
+            try
             {
-                CategoryId = getCategory.CategoryId,
-                CategoryDescription = getCategory.CategoryDescription,
-                CategoryName = getCategory.CategoryName,
-                CategoryStatus = getCategory.CategoryStatus,
-                CreateDate = getCategory.CreateDate,
-                EditDate = getCategory.EditDate
-            };
-            return new SuccessDataResult<CategoryResponse>(categoryResponse);
+                var getCategory = _categoryRepository.Get(c => c.CategoryId == id);
+
+                if (getCategory == null)
+                {
+                    return new ErrorDataResult<CategoryResponse>(default,"Kayıt bulunamadı.");
+                }
+                var categoryResponse = new CategoryResponse()
+                {
+                    CategoryId = getCategory.CategoryId,
+                    CategoryDescription = getCategory.CategoryDescription,
+                    CategoryName = getCategory.CategoryName,
+                    CategoryStatus = getCategory.CategoryStatus,
+                    CreateDate = getCategory.CreateDate,
+                    EditDate = getCategory.EditDate
+                };
+                return new SuccessDataResult<CategoryResponse>(categoryResponse);
+            }
+            catch (Exception ex)
+            {
+                return new ExceptionDataResult<CategoryResponse>();
+            }
+            
             
         }
 
