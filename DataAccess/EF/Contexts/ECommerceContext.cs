@@ -12,6 +12,7 @@ namespace DataAccess.EF.Contexts
     public class ECommerceContext : DbContext
     {
          public DbSet<Category> Categories { get; set; }
+         public DbSet<Product> Products { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
