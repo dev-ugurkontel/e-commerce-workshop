@@ -29,6 +29,18 @@ namespace WebAPI.Controllers
             return BadRequest(result);
         }
 
+        [HttpGet]
+        [Route("List_Product_By_Category/{id}")]
+        public IActionResult List_Product_By_Category_Id(int id)
+        {
+            var result = _productService.GetByCategoryId(id);
+            if (result.Status == ResultStatus.Success)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
+
         [Route("Save_Product")]
         [HttpPost]
         public IActionResult Save_Product(ProductRequest product)

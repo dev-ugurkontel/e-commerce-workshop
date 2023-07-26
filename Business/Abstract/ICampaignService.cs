@@ -10,8 +10,7 @@ using System.Threading.Tasks;
 
 namespace Business.Abstract
 {
-    public interface IProductService : IService<ProductRequest,ProductResponse>
+    public interface ICampaignService : IService<CampaignRequest, CampaignResponse>
     {
-        IDataResult<List<ProductResponse>> GetByCategoryId(int id);
     }
 }

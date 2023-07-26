@@ -23,6 +23,8 @@ ConnectionConfig.ConnectionString = builder.Configuration.GetConnectionString("E
 builder.Services.AddScoped<DbContext,ECommerceContext>();
 builder.Services.AddScoped<CategoryRepositoryBase, CategoryRepository>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
+builder.Services.AddScoped<CampaignRepositoryBase, CampaignRepository>();
+builder.Services.AddScoped<ICampaignService, CampaignService>();
 builder.Services.AddScoped<ProductRepositoryBase, ProductRepository>();
 builder.Services.AddScoped<IProductService, ProductService>();
 

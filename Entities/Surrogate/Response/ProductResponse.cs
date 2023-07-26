@@ -18,6 +18,7 @@ namespace Entities.Surrogate.Response
         public double ProductPrice { get; set; }
         public string ProductImagePath { get; set; }
         public CategoryResponse Category { get; set; }
+        public CampaignResponse Campaign { get; set; }
         public int ProductCampaingId { get; set; }
         public int ProductStatus { get; set; }
         public DateTime CreateDate { get; set; }

@@ -97,10 +97,7 @@ namespace Business.Concrete
             
         }
 
-      
-
      
-
       
     }
 }
