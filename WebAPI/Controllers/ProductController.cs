@@ -45,8 +45,8 @@ namespace WebAPI.Controllers
         [HttpPost]
         public IActionResult Save_Product(ProductRequest product)
         {
-            _productService.Add(product);
-            return Ok(product);
+            var result = _productService.Add(product);
+            return Ok(result);
         }
 
         [Route("Find_Product/{id}")]

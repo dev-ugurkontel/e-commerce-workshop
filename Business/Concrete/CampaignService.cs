@@ -21,7 +21,7 @@ namespace Business.Concrete
         {
             _campaignRepository = campaignRepository;
         }
-        public IResult Add(CampaignRequest data)
+        public IDataResult<CampaignResponse> Add(CampaignRequest data)
         {
             var entity = new Campaign()
             {
@@ -33,10 +33,24 @@ namespace Business.Concrete
                 EditDate = DateTime.Now,
                 EndDate = data.EndDate,
                 StartDate = data.StartDate
-
             };
+
             _campaignRepository.Add(entity);
-            return new SuccessResult("Kampanya kaydedildi.");
+
+            var campaignResponse = new CampaignResponse()
+            {
+                CampaignId = entity.CampaignId,
+                CampaignName = entity.CampaignName,
+                CampaignCode = entity.CampaignCode,
+                CampaignDiscountRate = entity.CampaignDiscountRate,
+                CampaignStatus = entity.CampaignStatus,
+                CreateDate = entity.CreateDate,
+                EditDate = entity.EditDate,
+                EndDate = entity.EndDate,
+                StartDate = entity.StartDate
+            };
+
+            return new SuccessDataResult<CampaignResponse>(campaignResponse, "Kampanya kaydedildi.");
         }
 
         public IResult Delete(int id)
@@ -48,13 +62,13 @@ namespace Business.Concrete
 
         public IDataResult<CampaignResponse> Get(int id)
         {
-            var campaign = _campaignRepository.Get(c=> c.CampaignId == id);
+            var campaign = _campaignRepository.Get(c => c.CampaignId == id);
             if (campaign is null)
             {
                 return new ErrorDataResult<CampaignResponse>(default, "Descriptive error message here.");
             }
 
-            var campaignResponse = new CampaignResponse()
+            CampaignResponse campaignResponse = new()
             {
                 CampaignId = campaign.CampaignId,
                 CampaignName = campaign.CampaignName,

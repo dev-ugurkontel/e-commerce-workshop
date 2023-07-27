@@ -33,8 +33,8 @@ namespace WebAPI.Controllers
         [HttpPost]
         public IActionResult Save_Category(CategoryRequest category)
         {
-            _categoryService.Add(category);
-            return Ok(category);
+            var result = _categoryService.Add(category);
+            return Ok(result);
         }
 
         [Route("Find_Category/{id}")]

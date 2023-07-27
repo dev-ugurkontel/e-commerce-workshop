@@ -64,7 +64,7 @@ namespace Business.Concrete
             
         }
 
-        public IResult Add(CategoryRequest data)
+        public IDataResult<CategoryResponse> Add(CategoryRequest data)
         {
             var entity = new Category()
             {
@@ -74,8 +74,20 @@ namespace Business.Concrete
                 CreateDate = DateTime.Now,
                 CategoryStatus = data.CategoryStatus
             };
+
             _categoryRepository.Add(entity);
-            return new SuccessResult("Kategori başarıyla kaydedildi.");
+
+            CategoryResponse categoryResponse = new()
+            {
+                CategoryDescription = entity.CategoryDescription,
+                CategoryName = entity.CategoryName,
+                CategoryId = entity.CategoryId,
+                CategoryStatus = entity.CategoryStatus,
+                CreateDate = entity.CreateDate,
+                EditDate = entity.EditDate
+            };
+
+            return new SuccessDataResult<CategoryResponse>(categoryResponse, "Kategori başarıyla kaydedildi.");
         }
 
         public IResult Update(int id, CategoryRequest data)

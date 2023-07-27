@@ -79,9 +79,7 @@ namespace Business.Concrete
             // Kategori nesnesi boş gelme durumu değerlendirilecek.
             var productResponse = new ProductResponse() 
             {
-                ProductCampaignId = product.ProductCampaignId,
-                ProductStatus = product.ProductStatus,
-                    
+                ProductStatus = product.ProductStatus,                    
                 ProductUrl = product.ProductUrl,
                 ProductImagePath = product.ProductImagePath,
                 CreateDate  = product.CreateDate,
@@ -100,7 +98,7 @@ namespace Business.Concrete
 
 
 
-        public IResult Add(ProductRequest data)
+        public IDataResult<ProductResponse> Add(ProductRequest data)
         {
             var entity = new Product()
             {
@@ -116,8 +114,26 @@ namespace Business.Concrete
                 ProductName= data.ProductName,
                 ProductUrl = Guid.NewGuid().ToString()
             };
+
             _productRepository.Add(entity);
-            return new SuccessResult("Ürün kaydedildi.");
+
+            ProductResponse productResponse = new()
+            {
+                ProductStatus = entity.ProductStatus,
+                ProductUrl = entity.ProductUrl,
+                ProductImagePath = entity.ProductImagePath,
+                CreateDate = entity.CreateDate,
+                ProductPrice = entity.ProductPrice,
+                ProductId = entity.ProductId,
+                ProductName = entity.ProductName,
+                EditDate = entity.EditDate,
+                ProductDescription = entity.ProductDescription,
+                ProductStock = entity.ProductStock,
+                Campaign = _campaignService.Get(entity.ProductCampaignId).Data,
+                Category = _categoryService.Get(entity.ProductCategoryId).Data
+            };
+
+            return new SuccessDataResult<ProductResponse>(productResponse, "Ürün kaydedildi.");
         }
 
 

@@ -28,16 +28,30 @@ namespace Core.DataAccess.Concrete.EF
             return _db.Set<TEntity>().SingleOrDefault(filter);
         }
 
-        public void Add(TEntity entity)
+        public TEntity Add(TEntity entity)
         {
             var addEntity = _db.Entry(entity);
             addEntity.State = EntityState.Added;
             _db.SaveChanges();
+            return entity;
         }
+
+        public void AddRange(List<TEntity> entities)
+        {
+            _db.Set<TEntity>().AddRange(entities);
+            _db.SaveChanges();
+        }
+
         public void Update(TEntity entity)
         {
             var updateEntity = _db.Entry(entity);
             updateEntity.State = EntityState.Modified;
+            _db.SaveChanges();
+        }
+
+        public void UpdateRange(List<TEntity> entities)
+        {
+            _db.Set<TEntity>().UpdateRange(entities);
             _db.SaveChanges();
         }
 

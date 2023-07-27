@@ -1,10 +1,5 @@
 ﻿using Core.Entity.Abstract;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Core.DataAccess.Abstract
 {
@@ -12,9 +7,10 @@ namespace Core.DataAccess.Abstract
     {
         List<T> GetAll(Expression<Func<T,bool>>? filter = null);
         T Get(Expression<Func<T, bool>> filter);
-        void Add(T entity);
+        T Add(T entity);
+        void AddRange(List<T> entities);
+        void UpdateRange(List<T> entities);
         void Update(T entity);
-        void Delete(T entity);
-        
+        void Delete(T entity);        
     }
 }
