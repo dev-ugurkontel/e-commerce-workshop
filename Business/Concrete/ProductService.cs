@@ -159,6 +159,25 @@ namespace Business.Concrete
 
         public IResult Update(int id, ProductRequest data)
         {
+            var oldProduct = _productRepository.Get(p => p.ProductId == id);
+            if (File.Exists(oldProduct.ProductImagePath))
+                File.Delete(oldProduct.ProductImagePath);
+            string fileName = "";
+            string fileExtension = "";
+            string filePath = "";
+
+            if (data.File != null && data.File.Length > 0)
+            {
+                fileExtension = Path.GetExtension(data.File.FileName);
+                fileName = Guid.NewGuid() + fileExtension;
+                filePath = Path.Combine("Files", fileName);
+
+                using (FileStream fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    data.File.CopyTo(fileStream);
+                }
+            }
+
             var product = _productRepository.Get(p => p.ProductId == id);
                 product.ProductCategoryId = data.ProductCategoryId; 
                 product.ProductDescription = data.ProductDescription;                
@@ -166,7 +185,7 @@ namespace Business.Concrete
                 product.ProductPrice = data.ProductPrice;
                 product.ProductCampaignId = data.ProductCampaignId;
                 product.ProductStatus = data.ProductStatus;
-                product.ProductImagePath = data.ProductImagePath;
+                product.ProductImagePath = filePath;
                 product.ProductStock = data.ProductStock;
                 product.ProductName = data.ProductName;
             _productRepository.Update(product);
@@ -177,6 +196,8 @@ namespace Business.Concrete
         public IResult Delete(int id)
         {
             var product = _productRepository.Get(p => p.ProductId == id);
+            if(File.Exists(product.ProductImagePath))
+                File.Delete(product.ProductImagePath);
             _productRepository.Delete(product);
             return new SuccessResult("Ürün Silindi.");
 

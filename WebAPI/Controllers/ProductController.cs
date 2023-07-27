@@ -71,7 +71,7 @@ namespace WebAPI.Controllers
 
         [Route("Update_Product/{id}")]
         [HttpPut]
-        public IActionResult Update_Product(int id, ProductRequest product)
+        public IActionResult Update_Product(int id, [FromForm] ProductRequest product)
         {
             _productService.Update(id, product);
             return Ok(product);
