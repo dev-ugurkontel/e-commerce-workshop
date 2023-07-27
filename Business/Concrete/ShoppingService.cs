@@ -49,18 +49,15 @@ namespace Business.Concrete
 
             _productService.Update(product.ProductId, productRequest);
 
-            var cart = _cartService.Get(cartResult.Data.CartId).Data;
-            var cartItems = _cartService.GetCartItemsByCartId(cartResult.Data.CartId).Data;
-
             CartResponse cartResponse = new()
             {
-                CartId = cart.CartId,
-                UserId = cart.UserId,
-                TotalItemQuantity = cart.TotalItemQuantity,
-                TotalItemPrice = cart.TotalItemPrice,
-                CreateDate = cart.CreateDate,
-                EditDate = cart.EditDate,
-                CartItems = cartItems
+                CartId = cartResult.Data.CartId,
+                UserId = cartResult.Data.UserId,
+                TotalItemQuantity = cartResult.Data.TotalItemQuantity,
+                TotalItemPrice = cartResult.Data.TotalItemPrice,
+                CreateDate = cartResult.Data.CreateDate,
+                EditDate = cartResult.Data.EditDate,
+                CartItems = cartResult.Data.CartItems
             };
 
             return new SuccessDataResult<CartResponse>(cartResponse, "Ürün sepete eklendi.");
