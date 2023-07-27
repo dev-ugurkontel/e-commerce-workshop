@@ -34,8 +34,8 @@ namespace WebAPI.Controllers
         [HttpPost]
         public IActionResult Save_Category(CampaignRequest campaign)
         {
-            _campaignService.Add(campaign);
-            return Ok(campaign);
+            var result = _campaignService.Add(campaign);
+            return Ok(result);
         }
 
         [Route("Find_Campaign/{id}")]

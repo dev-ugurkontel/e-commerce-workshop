@@ -27,6 +27,10 @@ builder.Services.AddScoped<CampaignRepositoryBase, CampaignRepository>();
 builder.Services.AddScoped<ICampaignService, CampaignService>();
 builder.Services.AddScoped<ProductRepositoryBase, ProductRepository>();
 builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddScoped<CartRepositoryBase, CartRepository>();
+builder.Services.AddScoped<CartItemRepositoryBase, CartItemRepository>();
+builder.Services.AddScoped<ICartService, CartService>();
+builder.Services.AddScoped<IShoppingService, ShoppingService>();
 
 var app = builder.Build();
 

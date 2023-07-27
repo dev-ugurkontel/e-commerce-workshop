@@ -12,13 +12,10 @@ namespace Core.Business.Abstract
     public interface IService<TRequest,TResponse>  where TRequest : ISurrogate, new()
                                                    where TResponse : ISurrogate, new()
     {
-       IDataResult<List<TResponse>> GetAll();
-       IDataResult<TResponse> Get(int id);
-       IResult Add(TRequest data);
-       IResult Update(int id,TRequest data);
-       IResult Delete(int id);
-
-        
-
+        IDataResult<List<TResponse>> GetAll();
+        IDataResult<TResponse> Get(int id);
+        IDataResult<TResponse> Add(TRequest data);
+        IResult Update(int id,TRequest data);
+        IResult Delete(int id);
     }
 }

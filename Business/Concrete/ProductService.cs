@@ -29,6 +29,8 @@ namespace Business.Concrete
 
         public IDataResult<List<ProductResponse>> GetAll()
         {
+
+
             
             var productList = _productRepository.GetAll().Select(p=> new ProductResponse()
             {
@@ -79,9 +81,7 @@ namespace Business.Concrete
             // Kategori nesnesi boş gelme durumu değerlendirilecek.
             var productResponse = new ProductResponse() 
             {
-                ProductCampaignId = product.ProductCampaignId,
-                ProductStatus = product.ProductStatus,
-                    
+                ProductStatus = product.ProductStatus,                    
                 ProductUrl = product.ProductUrl,
                 ProductImagePath = product.ProductImagePath,
                 CreateDate  = product.CreateDate,
@@ -100,8 +100,25 @@ namespace Business.Concrete
 
 
 
-        public IResult Add(ProductRequest data)
+        public IDataResult<ProductResponse> Add(ProductRequest data)
         {
+            string fileName = "";
+            string fileExtension = "";
+            string filePath = "";
+
+            if (data.File != null && data.File.Length > 0)
+            {
+                fileExtension = Path.GetExtension(data.File.FileName);
+                fileName = Guid.NewGuid() + fileExtension;
+                filePath = Path.Combine("Files", fileName);
+
+                using(FileStream fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    data.File.CopyTo(fileStream);
+                }
+            }
+
+
             var entity = new Product()
             {
                 ProductCategoryId = data.ProductCategoryId, 
@@ -111,13 +128,31 @@ namespace Business.Concrete
                 ProductPrice = data.ProductPrice,
                 ProductCampaignId = data.ProductCampaignId,
                 ProductStatus = data.ProductStatus,
-                ProductImagePath = data.ProductImagePath,
+                ProductImagePath = filePath,
                 ProductStock = data.ProductStock,
                 ProductName= data.ProductName,
                 ProductUrl = Guid.NewGuid().ToString()
             };
+
             _productRepository.Add(entity);
-            return new SuccessResult("Ürün kaydedildi.");
+
+            ProductResponse productResponse = new()
+            {
+                ProductStatus = entity.ProductStatus,
+                ProductUrl = entity.ProductUrl,
+                ProductImagePath = entity.ProductImagePath,
+                CreateDate = entity.CreateDate,
+                ProductPrice = entity.ProductPrice,
+                ProductId = entity.ProductId,
+                ProductName = entity.ProductName,
+                EditDate = entity.EditDate,
+                ProductDescription = entity.ProductDescription,
+                ProductStock = entity.ProductStock,
+                Campaign = _campaignService.Get(entity.ProductCampaignId).Data,
+                Category = _categoryService.Get(entity.ProductCategoryId).Data
+            };
+
+            return new SuccessDataResult<ProductResponse>(productResponse, "Ürün kaydedildi.");
         }
 
 
