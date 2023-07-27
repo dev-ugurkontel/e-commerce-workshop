@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace WebAPI.Controllers
 {
-    [Route("api/v1/category")]
+    [Route("api/v1/campaign")]
     [ApiController]
     public class CampaignController : ControllerBase
     {
@@ -32,7 +32,7 @@ namespace WebAPI.Controllers
 
         [Route("Save_Campaign")]
         [HttpPost]
-        public IActionResult Save_Category(CampaignRequest campaign)
+        public IActionResult Save_Campaign(CampaignRequest campaign)
         {
             _campaignService.Add(campaign);
             return Ok(campaign);
@@ -40,7 +40,7 @@ namespace WebAPI.Controllers
 
         [Route("Find_Campaign/{id}")]
         [HttpGet]
-        public IActionResult Find_Category(int id)
+        public IActionResult Find_Campaign(int id)
         {
             var campaign = _campaignService.Get(id);
             if (campaign.Status == ResultStatus.Error)
@@ -60,7 +60,7 @@ namespace WebAPI.Controllers
 
         [Route("Update_Campaign/{id}")]
         [HttpPut]
-        public IActionResult Update_Category(int id, CampaignRequest campaign)
+        public IActionResult Update_Campaign(int id, CampaignRequest campaign)
         {
             _campaignService.Update(id, campaign);
             return Ok(campaign);
@@ -68,7 +68,7 @@ namespace WebAPI.Controllers
 
         [Route("Delete_Campaign/{id}")]
         [HttpDelete]
-        public IActionResult Delete_Category(int id)
+        public IActionResult Delete_Campaign(int id)
         {
             _campaignService.Delete(id);
             return NoContent();
