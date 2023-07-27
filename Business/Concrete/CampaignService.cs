@@ -49,6 +49,10 @@ namespace Business.Concrete
         public IDataResult<CampaignResponse> Get(int id)
         {
             var campaign = _campaignRepository.Get(c=> c.CampaignId == id);
+            if (campaign is null)
+            {
+                return new ErrorDataResult<CampaignResponse>(default, "Descriptive error message here.");
+            }
 
             var campaignResponse = new CampaignResponse()
             {

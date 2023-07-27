@@ -37,13 +37,12 @@ namespace Business.Concrete
                 ProductPrice = p.ProductPrice,
                 ProductName = p.ProductName,
                 ProductDescription = p.ProductDescription,
-                ProductSKU    = p.ProductSKU,
                 ProductStock        = p.ProductStock,
                 ProductImagePath = p.ProductImagePath,  
                 ProductStatus = p.ProductStatus,    
                 ProductUrl  = p.ProductUrl,
                 EditDate = p.EditDate,  
-                Campaign = _campaignService.Get(p.ProductCampaingId).Data,
+                Campaign = _campaignService.Get(p.ProductCampaignId).Data,
                 Category = _categoryService.Get(p.ProductCategoryId).Data
                 
             }).ToList();
@@ -61,13 +60,12 @@ namespace Business.Concrete
                 ProductPrice = p.ProductPrice,
                 ProductName = p.ProductName,
                 ProductDescription = p.ProductDescription,
-                ProductSKU = p.ProductSKU,
                 ProductStock = p.ProductStock,
                 ProductImagePath = p.ProductImagePath,
                 ProductStatus = p.ProductStatus,
                 ProductUrl = p.ProductUrl,
                 EditDate = p.EditDate,
-                Campaign = _campaignService.Get(p.ProductCampaingId).Data,
+                Campaign = _campaignService.Get(p.ProductCampaignId).Data,
                 Category = _categoryService.Get(p.ProductCategoryId).Data
 
             }).ToList();
@@ -81,7 +79,7 @@ namespace Business.Concrete
             // Kategori nesnesi boş gelme durumu değerlendirilecek.
             var productResponse = new ProductResponse() 
             {
-                ProductCampaingId= product.ProductCampaingId,
+                ProductCampaignId = product.ProductCampaignId,
                 ProductStatus = product.ProductStatus,
                     
                 ProductUrl = product.ProductUrl,
@@ -92,9 +90,8 @@ namespace Business.Concrete
                 ProductName = product.ProductName,
                 EditDate= product.EditDate,
                 ProductDescription = product.ProductDescription,
-                ProductSKU  = product.ProductSKU,
                 ProductStock = product.ProductStock,
-                Campaign = _campaignService.Get(product.ProductCampaingId).Data,
+                Campaign = _campaignService.Get(product.ProductCampaignId).Data,
                 Category = _categoryService.Get(product.ProductCategoryId).Data 
             };
 
@@ -112,14 +109,12 @@ namespace Business.Concrete
                 CreateDate = DateTime.Now,
                 EditDate = DateTime.Now,
                 ProductPrice = data.ProductPrice,
-                ProductCampaingId = data.ProductCampaingId,
+                ProductCampaignId = data.ProductCampaignId,
                 ProductStatus = data.ProductStatus,
                 ProductImagePath = data.ProductImagePath,
                 ProductStock = data.ProductStock,
-                ProductUrl    = data.ProductUrl,
                 ProductName= data.ProductName,
-                ProductSKU= data.ProductSKU
-                
+                ProductUrl = Guid.NewGuid().ToString()
             };
             _productRepository.Add(entity);
             return new SuccessResult("Ürün kaydedildi.");
@@ -134,13 +129,12 @@ namespace Business.Concrete
                 product.ProductDescription = data.ProductDescription;                
                 product.EditDate = DateTime.Now;
                 product.ProductPrice = data.ProductPrice;
-                product.ProductCampaingId = data.ProductCampaingId;
+                product.ProductCampaignId = data.ProductCampaignId;
                 product.ProductStatus = data.ProductStatus;
                 product.ProductImagePath = data.ProductImagePath;
                 product.ProductStock = data.ProductStock;
-                product.ProductUrl = data.ProductUrl;
+                // product url otomatik oluşturulmalı
                 product.ProductName = data.ProductName;
-                product.ProductSKU = data.ProductSKU;
             _productRepository.Update(product);
             return new SuccessResult("Ürün bilgileri güncellendi.");
 
