@@ -138,14 +138,25 @@ namespace Business.Concrete
                 return new ErrorDataResult<CartResponse>(default, "Descriptive error message here.");
             }
 
-            var cartResponse = new CartResponse()
+            var cartItems = _cartItemRepository.GetAll(c => c.CartId == cart.CartId);
+
+            CartResponse cartResponse = new()
             {
                 CartId = cart.CartId,
                 UserId = cart.UserId,
                 TotalItemQuantity = cart.TotalItemQuantity,
                 TotalItemPrice = cart.TotalItemPrice,
                 CreateDate = cart.CreateDate,
-                EditDate = cart.EditDate
+                EditDate = cart.EditDate,
+                CartItems = cartItems?.Select(c => new CartItemResponse()
+                {
+                    CartItemId = c.CartItemId,
+                    CartId = c.CartId,
+                    ProductId = c.ProductId,
+                    ItemQuantity = c.ItemQuantity,
+                    CreateDate = c.CreateDate,
+                    EditDate = c.EditDate
+                }).ToList() ?? new()
             };
 
             return new SuccessDataResult<CartResponse>(cartResponse, "Sepet bilgisi getirildi.");

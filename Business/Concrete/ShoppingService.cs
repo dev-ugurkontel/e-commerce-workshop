@@ -71,6 +71,9 @@ namespace Business.Concrete
         public IResult RemoveFromCart(int cartItemId)
         {
             _cartService.DeleteCartItem(cartItemId);
+
+            //TODO: Silme işleminden sonra ürün stounu arttırma işlemi yapılacak.
+
             return new SuccessResult("Ürün sepetten silindi.");
         }
 
