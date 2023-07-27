@@ -95,7 +95,6 @@ namespace Business.Concrete
             campaign.CampaignCode = data.CampaignCode;
             campaign.CampaignDiscountRate = data.CampaignDiscountRate;
             campaign.CampaignStatus = data.CampaignStatus;
-            campaign.CreateDate = data.CreateDate;
             campaign.EditDate = DateTime.Now;
             campaign.StartDate = data.StartDate;
             campaign.EndDate = data.EndDate;
