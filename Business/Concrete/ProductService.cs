@@ -29,6 +29,8 @@ namespace Business.Concrete
 
         public IDataResult<List<ProductResponse>> GetAll()
         {
+
+
             
             var productList = _productRepository.GetAll().Select(p=> new ProductResponse()
             {
@@ -100,6 +102,23 @@ namespace Business.Concrete
 
         public IDataResult<ProductResponse> Add(ProductRequest data)
         {
+            string fileName = "";
+            string fileExtension = "";
+            string filePath = "";
+
+            if (data.File != null && data.File.Length > 0)
+            {
+                fileExtension = Path.GetExtension(data.File.FileName);
+                fileName = Guid.NewGuid() + fileExtension;
+                filePath = Path.Combine("Files", fileName);
+
+                using(FileStream fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    data.File.CopyTo(fileStream);
+                }
+            }
+
+
             var entity = new Product()
             {
                 ProductCategoryId = data.ProductCategoryId, 
@@ -109,7 +128,7 @@ namespace Business.Concrete
                 ProductPrice = data.ProductPrice,
                 ProductCampaignId = data.ProductCampaignId,
                 ProductStatus = data.ProductStatus,
-                ProductImagePath = data.ProductImagePath,
+                ProductImagePath = filePath,
                 ProductStock = data.ProductStock,
                 ProductName= data.ProductName,
                 ProductUrl = Guid.NewGuid().ToString()

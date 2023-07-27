@@ -43,7 +43,7 @@ namespace WebAPI.Controllers
 
         [Route("Save_Product")]
         [HttpPost]
-        public IActionResult Save_Product(ProductRequest product)
+        public IActionResult Save_Product([FromForm] ProductRequest product)
         {
             var result = _productService.Add(product);
             return Ok(result);
