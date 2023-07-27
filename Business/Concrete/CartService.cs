@@ -197,20 +197,5 @@ namespace Business.Concrete
             _cartItemRepository.Delete(cartItem);
             return new SuccessResult("Ürün sepetten başarıyla silindi.");
         }
-
-        public IDataResult<List<CartItemResponse>> GetCartItemsByCartId(int cartId)
-        {
-            var cartItems = _cartItemRepository.GetAll(x => x.CartId == cartId).Select(x => new CartItemResponse()
-            {
-                CartItemId = x.CartItemId,
-                CartId = x.CartId,
-                ProductId = x.ProductId,
-                ItemQuantity = x.ItemQuantity,
-                CreateDate = x.CreateDate,
-                EditDate = x.EditDate
-            }).ToList();
-
-            return new SuccessDataResult<List<CartItemResponse>>(cartItems, "Sepet ait tüm sepet detayları getirildi.");
-        }
     }
 }
