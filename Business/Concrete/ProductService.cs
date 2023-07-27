@@ -18,11 +18,13 @@ namespace Business.Concrete
     {
         private readonly ProductRepositoryBase _productRepository;
         private readonly ICategoryService _categoryService;
+        private readonly ICampaignService _campaignService;
 
-        public ProductService(ProductRepositoryBase productRepository, ICategoryService categoryService)
+        public ProductService(ProductRepositoryBase productRepository, ICategoryService categoryService, ICampaignService campaignService)
         {
             _productRepository = productRepository;
-            _categoryService = categoryService; 
+            _categoryService = categoryService;
+            _campaignService = campaignService;
         }
 
         public IDataResult<List<ProductResponse>> GetAll()
@@ -41,12 +43,36 @@ namespace Business.Concrete
                 ProductStatus = p.ProductStatus,    
                 ProductUrl  = p.ProductUrl,
                 EditDate = p.EditDate,  
-                ProductCampaingId = p.ProductCampaingId,
+                Campaign = _campaignService.Get(p.ProductCampaingId).Data,
                 Category = _categoryService.Get(p.ProductCategoryId).Data
                 
             }).ToList();
 
             return new SuccessDataResult<List<ProductResponse>>(productList, "Ürün bilgileri getirildi.");
+        }
+
+        public IDataResult<List<ProductResponse>> GetByCategoryId(int id)
+        {
+
+            var productList = _productRepository.GetAll(p=> p.ProductCategoryId == id).Select(p => new ProductResponse()
+            {
+                ProductId = p.ProductId,
+                CreateDate = p.CreateDate,
+                ProductPrice = p.ProductPrice,
+                ProductName = p.ProductName,
+                ProductDescription = p.ProductDescription,
+                ProductSKU = p.ProductSKU,
+                ProductStock = p.ProductStock,
+                ProductImagePath = p.ProductImagePath,
+                ProductStatus = p.ProductStatus,
+                ProductUrl = p.ProductUrl,
+                EditDate = p.EditDate,
+                Campaign = _campaignService.Get(p.ProductCampaingId).Data,
+                Category = _categoryService.Get(p.ProductCategoryId).Data
+
+            }).ToList();
+
+            return new SuccessDataResult<List<ProductResponse>>(productList, "Kategoriye ait tüm ürün bilgileri getirildi.");
         }
 
         public IDataResult<ProductResponse> Get(int id)
@@ -68,11 +94,14 @@ namespace Business.Concrete
                 ProductDescription = product.ProductDescription,
                 ProductSKU  = product.ProductSKU,
                 ProductStock = product.ProductStock,
+                Campaign = _campaignService.Get(product.ProductCampaingId).Data,
                 Category = _categoryService.Get(product.ProductCategoryId).Data 
             };
 
             return new SuccessDataResult<ProductResponse>(productResponse, "Ürün bilgisi getirildi.");
         }
+
+
 
         public IResult Add(ProductRequest data)
         {
