@@ -133,7 +133,6 @@ namespace Business.Concrete
                 product.ProductStatus = data.ProductStatus;
                 product.ProductImagePath = data.ProductImagePath;
                 product.ProductStock = data.ProductStock;
-                // product url otomatik oluşturulmalı
                 product.ProductName = data.ProductName;
             _productRepository.Update(product);
             return new SuccessResult("Ürün bilgileri güncellendi.");
