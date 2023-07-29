@@ -1,0 +1,21 @@
+SERILOG SELFLOG MEKANİZMASI: Log kayıtlarınızın ilgili sink noktasına kaydedilmediğini görüyorsanız serilogun
+kendi iç hatalarını denetleyen izleme ve raporlama özelliği olan selflog mekanizmasına başvurabilirsiniz.
+Serilog kendi içinde bir hata ile karşılaştığında bunları selflog ile raporlar ve izler.
+Varsayılan olarak etkindir ancak config ile ayarlanabilmektedir.
+İçinde levelswitch adında bir özellik bulunur bununla selflogun düzeyini ayarlayabilirsiniz.
+
+SERILOG BUFFERED ÖZELLİĞİ : Serilog logları doğrudan hedefe iletir ve hedefin işleme süresi veya ağ gecikmesi 
+gibi faktörlere bağlı olarak performans etkilenebilir.Buffered özelliği logların önce bir bellek tamponunda biriktirilmesini ve ardından
+toplu olarak hedefe iletir.Bu verimliliği artırmaktadır. Logların yoğun olarak kaydedildiği durumda daha verimli olabilir.
+Bellek bir dizi logu geçici olarak saklar süre ya da boyut kriterine ulaşıldığında logları toplu olarak hedefe gönderir.
+Uygulama performansını etkilemeden daha hızlı bir loglama deneyimi sağlar.
+buffered özelliği appsetting configinde kolay şekilde devreye alıabiliyor aynı şekilde ne kadar sürede bir çalışacağı ve dosya sayısını da buradan tanımlayabiliyorsunuz.
+
+Veritabanı Tercihi
+Yük ve Trafik	Veritabanı Ayarları Donanım ve Ağ Altyapısı
+
+MongoDB'nin doküman tabanlı yapısı ve ölçeklenebilirliği, Serilog loglarının hızlı bir şekilde kaydedilmesi için avantaj sağlayabilir. MongoDB, JSON formatındaki logları doğrudan saklamak için optimize edilmiş bir NoSQL veritabanıdır. Bu nedenle, logların MongoDB'ye kaydedilmesi, belirli bir hızda ve düşük gecikmeyle gerçekleştirilebilir.
+
+Öte yandan, MSSQL gibi ilişkisel veritabanları da yüksek performans sunabilir. Ancak, ilişkisel veritabanlarındaki şema yapısı ve indeksleme gibi ekstra işlemler, logların kaydedilme süresini etkileyebilir. MSSQL gibi veritabanları genellikle yapılandırma ve indeksleme optimizasyonları gerektirebilir.
+
+Sonuç olarak, hangi veritabanının Serilog loglarını daha hızlı kaydettiğini belirlemek için gerçek dünya senaryolarında performans testleri yapmanız önerilir. Uygulamanızın özelliklerine, veritabanı yapılandırmasına ve performans hedeflerinize bağlı olarak en uygun veritabanını seçmeniz önemlidir.
