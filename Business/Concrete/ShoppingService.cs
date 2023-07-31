@@ -1,7 +1,10 @@
 ﻿using Business.Abstract;
 using Core.Utils;
+using DataAccess.EF.Abstract;
+using DataAccess.EF.Concrete;
 using Entities.Surrogate.Request;
 using Entities.Surrogate.Response;
+using System.Reflection.Metadata;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Business.Concrete
@@ -10,6 +13,7 @@ namespace Business.Concrete
     {
         private readonly IProductService _productService;
         private readonly ICartService _cartService;
+        private readonly CartItemRepositoryBase _cartItemRepository;
 
         public ShoppingService(IProductService productService, ICartService cartService)
         {
@@ -70,9 +74,31 @@ namespace Business.Concrete
 
         public IResult RemoveFromCart(int cartItemId)
         {
+            var getCartItem = _cartItemRepository.Get(cartItemId);
+            var getCart = _cartService.Get(cartItemId).Data;
             _cartService.DeleteCartItem(cartItemId);
 
+            foreach (var item in getCart.CartItems)
+            {
+                var product = _productService.Get(item.ProductId);
+                ProductRequest productRequest = new()
+                {
+                    ProductStock = product.Data.ProductStock += 1,
+                    ProductCategoryId = product.Data.Category.CategoryId,
+                    ProductCampaignId = product.Data.Campaign.CampaignId,
+                    ProductDescription = product.Data.ProductDescription,
+                    ProductPrice = product.Data.ProductPrice,
+                    ProductStatus = product.Data.ProductStatus,
+                    ProductImagePath = product.Data.ProductImagePath,
+                    ProductName = product.Data.ProductName
+
+                };
+                _productService.Update(item.ProductId, productRequest);
+            }
+
+            
             //TODO: Silme işleminden sonra ürün stounu arttırma işlemi yapılacak.
+   
 
             return new SuccessResult("Ürün sepetten silindi.");
         }

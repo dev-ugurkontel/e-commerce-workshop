@@ -127,7 +127,15 @@ namespace Business.Concrete
 
         public IResult Delete(int id)
         {
-            throw new NotImplementedException();
+            var cart = _cartRepository.Get(c=> c.CartId == id);
+            if (cart is null)
+            {
+                return new ErrorDataResult<CartResponse>(default, "Sepet silinemedi.");
+            }
+
+            _cartRepository.Delete(cart);
+      
+            return new SuccessDataResult<CartResponse>(default, "Sepet silindi.");
         }
 
         public IDataResult<CartResponse> Get(int id)
