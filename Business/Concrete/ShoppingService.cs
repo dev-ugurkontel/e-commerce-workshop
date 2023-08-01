@@ -78,7 +78,7 @@ namespace Business.Concrete
             var cartUpdate = cartResult.Data;
 
             var itemUpdate = cartUpdate.CartItems.FirstOrDefault(item => item.ProductId == cartItemRequest.ProductId);
-            
+
 
 
             if (itemUpdate == null)
@@ -118,9 +118,23 @@ namespace Business.Concrete
         }
 
 
-        public IResult RemoveFromCart(int cartItemId)
+        public IResult RemoveFromCart(int cartItemId, CartItemRequest cartItemRequest)
         {
+            var product = _productService.Get(cartItemRequest.ProductId).Data;
             _cartService.DeleteCartItem(cartItemId);
+
+            ProductRequest productRequest = new()
+            {
+                ProductStock = product.ProductStock += cartItemRequest.ItemQuantity,
+                ProductCategoryId = product.Category.CategoryId,
+                ProductCampaignId = product.Campaign.CampaignId,
+                ProductDescription = product.ProductDescription,
+                ProductPrice = product.ProductPrice,
+                ProductStatus = product.ProductStatus,
+                ProductImagePath = product.ProductImagePath,
+                ProductName = product.ProductName
+            };
+            _productService.Update(product.ProductId, productRequest);
 
             return new SuccessResult("Ürün sepetten silindi.");
         }
@@ -130,5 +144,7 @@ namespace Business.Concrete
             _cartService.DeleteCartItem(cartId);
             return new SuccessResult("Cart silindi.");
         }
+
+
     }
 }

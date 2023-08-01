@@ -8,7 +8,7 @@ namespace Business.Abstract
     {
         IDataResult<CartResponse> AddToCart(int userId, CartItemRequest cartItemRequest);
         IDataResult<CartResponse> UpdateCart(int userId, CartItemRequest cartItemRequest);
-        IResult RemoveFromCart(int cartItemId);
+        IResult RemoveFromCart(int cartItemId, CartItemRequest cartItemRequest);
         IResult ClearCart(int cartId);
     }
 }
