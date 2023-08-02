@@ -22,28 +22,12 @@ namespace WebAPI.Controllers
             var result = _shoppingService.AddToCart(userId, cartItemRequest);
             return Ok(result);
         }
-        [Route("UpdateToCart")]
-        [HttpPut]
-        public IActionResult UpdateToCart(int cartId, CartItemRequest cartItemRequest)
-        {
-            var result = _shoppingService.UpdateCart(cartId, cartItemRequest);
-
-            return Ok(result);
-        }
 
         [Route("RemoveFromCart")]
         [HttpDelete]
-        public IActionResult RemoveFromCart(int cartId, CartItemRequest cartItemRequest)
+        public IActionResult RemoveFromCart(int cartItemRequest)
         {
-            var result = _shoppingService.RemoveFromCart(cartId, cartItemRequest);
-            return Ok(result);
-
-        }
-        [Route("ClearCart")]
-        [HttpDelete]
-        public IActionResult ClearCart(int cartId)
-        {
-            var result = _shoppingService.ClearCart(cartId);
+            var result = _shoppingService.RemoveFromCart(cartItemRequest);
             return Ok(result);
         }
     }
