@@ -1,6 +1,7 @@
 using Business.Abstract;
 using Business.Concrete;
 using Core.DataAccess.Configs;
+using Core.Utils.Security.JWT;
 using DataAccess.EF.Abstract;
 using DataAccess.EF.Concrete;
 using DataAccess.EF.Contexts;
@@ -31,6 +32,12 @@ builder.Services.AddScoped<CartRepositoryBase, CartRepository>();
 builder.Services.AddScoped<CartItemRepositoryBase, CartItemRepository>();
 builder.Services.AddScoped<ICartService, CartService>();
 builder.Services.AddScoped<IShoppingService, ShoppingService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<UserRepositoryBase, UserRepository>();
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<ITokenHelper, JWTHelper>();
+
 
 var app = builder.Build();
 

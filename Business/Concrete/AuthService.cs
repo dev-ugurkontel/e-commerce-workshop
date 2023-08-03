@@ -1,7 +1,9 @@
 ﻿using Business.Abstract;
+using Core.Entity.Concrete;
 using Core.Utils;
 using Core.Utils.Enums;
 using Core.Utils.Security.Helpers;
+using Core.Utils.Security.JWT;
 using Entities.Surrogate.Request;
 using Entities.Surrogate.Response;
 using System;
@@ -14,10 +16,12 @@ namespace Business.Concrete
 {
     public class AuthService : IAuthService
     {
-        private readonly IUserService _userService;
-        public AuthService(IUserService userService)
+        private  IUserService _userService;
+        private ITokenHelper _tokenHelper;
+        public AuthService(IUserService userService,ITokenHelper tokenHelper)
         {
             _userService = userService;
+            _tokenHelper = tokenHelper;
         }
       
 
@@ -64,6 +68,22 @@ namespace Business.Concrete
                 UserRole = (int)Roles.User,
             };
             return new SuccessDataResult<UserResponse>(user, "Başarılı Giriş");
+        }
+
+
+        public IResult UserExists(string email)
+        {
+            if(_userService.GetByMail(email)!= null)
+            {
+                return new ErrorResult("Kullanıcı Mevcut");
+            }
+            return new SuccessResult();
+        }
+
+        public IDataResult<AccessToken>CreateAccessToken(UserTokenModel data)
+        {
+            var accessToken = _tokenHelper.CreateToken(data);
+            return new SuccessDataResult<AccessToken>(accessToken, "Token oluşturuldu");
         }
     }
 }
