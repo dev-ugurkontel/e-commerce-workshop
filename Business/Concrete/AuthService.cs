@@ -25,21 +25,28 @@ namespace Business.Concrete
         {
             byte[] passwordHash, passwordSalt;
             HashingHelper.CreatePasswordHash(data.UserPassword, out passwordHash, out passwordSalt);
-
-            var userRequest = new UserRequest()
+            
+            var userToCheck = _userService.GetByMail(data.UserEmail);
+            if (userToCheck == null)
             {
-                UserAddress = data.UserAddress,
-                UserEmail = data.UserEmail,
-                UserFirstName = data.UserFirstName,
-                UserLastName = data.UserLastName,
-                UserName = data.UserName,
-                UserPasswordHash = passwordHash,
-                UserPasswordSalt = passwordSalt,
-                UserRole = (int)Roles.User
-            };
-            var userResponse = _userService.Add(userRequest);
-            return new SuccessDataResult<UserResponse>(userResponse.Data);
+                var userRequest = new UserRequest()
+                {
+                    UserAddress = data.UserAddress,
+                    UserEmail = data.UserEmail,
+                    UserFirstName = data.UserFirstName,
+                    UserLastName = data.UserLastName,
+                    UserName = data.UserName,
+                    UserPasswordHash = passwordHash,
+                    UserPasswordSalt = passwordSalt,
+                    UserRole = (int)Roles.User
+                };
+                var userResponse = _userService.Add(userRequest);
+                return new SuccessDataResult<UserResponse>(userResponse.Data);
+
+            }
+            return new ErrorDataResult<UserResponse>(default, "Kullanıcı mevcut");
         }
+    
 
         public IDataResult<UserResponse> Login(LoginRequest data)
         {
