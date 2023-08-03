@@ -17,17 +17,25 @@ namespace WebAPI.Controllers
 
         [Route("AddToCart")]
         [HttpPost]
-        public IActionResult AddToCart(int userId, CartItemRequest cartItemRequest)
+        public IActionResult AddToCart(int userId, CartItemRequest cartItemId)
         {
-            var result = _shoppingService.AddToCart(userId, cartItemRequest);
+            var result = _shoppingService.AddToCart(userId, cartItemId);
             return Ok(result);
         }
 
         [Route("RemoveFromCart")]
         [HttpDelete]
-        public IActionResult RemoveFromCart(int cartItemRequest)
+        public IActionResult RemoveFromCart(int cartItemId)
         {
-            var result = _shoppingService.RemoveFromCart(cartItemRequest);
+            var result = _shoppingService.RemoveFromCart(cartItemId);
+            return Ok(result);
+        }
+
+        [Route("ClearCart")]
+        [HttpDelete]
+        public IActionResult ClearCart(int cartId)
+        {
+            var result = _shoppingService.ClearCart(cartId);
             return Ok(result);
         }
     }

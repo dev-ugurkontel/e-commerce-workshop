@@ -1,7 +1,6 @@
 ﻿using Business.Abstract;
 using Core.Utils;
 using DataAccess.EF.Abstract;
-using DataAccess.EF.Concrete;
 using Entities.Entity;
 using Entities.Surrogate.Request;
 using Entities.Surrogate.Response;
@@ -127,7 +126,18 @@ namespace Business.Concrete
 
         public IResult Delete(int id)
         {
-            throw new NotImplementedException();
+            var cart = _cartRepository.Get(c => c.CartId == id);
+            if (cart is null)
+            {
+                return new ErrorDataResult<CartResponse>(default, "Sepet bulunamadı.");
+            }
+
+            var cartItems = _cartItemRepository.GetAll(c => c.CartId == cart.CartId);
+            cartItems?.ForEach(x => _cartItemRepository.Delete(x));
+
+            _cartRepository.Delete(cart);
+
+            return new SuccessResult("Sepet başarıyla temizlendi.");
         }
 
         public IDataResult<CartResponse> Get(int id)
@@ -188,7 +198,60 @@ namespace Business.Concrete
 
         public IResult Update(int id, CartRequest data)
         {
-            throw new NotImplementedException();
+            if (data is null)
+            {
+                return new ErrorDataResult<CartResponse>(default, "Sepet bilgileri boş olamaz.");
+            }
+
+            var cart = _cartRepository.Get(c => c.CartId == id);
+            if (cart is null)
+            {
+                return new ErrorDataResult<CartResponse>(default, "Sepet bulunamadı.");
+            }
+
+            cart.TotalItemQuantity = data.TotalItemQuantity;
+            cart.TotalItemPrice = data.TotalItemPrice;
+            cart.EditDate = DateTime.Now;
+            _cartRepository.Update(cart);
+
+            if (data.CartItems.Count > 0)
+            {
+                foreach (var cartItem in data.CartItems)
+                {
+                    var cartItemResult = _cartItemRepository.Get(c => c.ProductId == cartItem.ProductId);
+                    if (cartItemResult is null)
+                    {
+                        return new ErrorDataResult<CartResponse>(default, "Ürün sepette bulunamadı.");
+                    }
+
+                    cartItemResult.ItemQuantity = cartItem.ItemQuantity;
+                    cartItemResult.EditDate = DateTime.Now;
+                    _cartItemRepository.Update(cartItemResult);
+                }
+            }
+
+            return new SuccessResult("Sepet başarıyla güncellendi");
+        }
+                
+        public IDataResult<CartItemResponse> GetCartItemByCartItemId(int cartItemId)
+        {
+            var cartItem = _cartItemRepository.Get(c => c.CartItemId == cartItemId);
+            if (cartItem is null)
+            {
+                return new ErrorDataResult<CartItemResponse>(default, "Descriptive error message here.");
+            }
+
+            CartItemResponse cartItemResponse = new()
+            {
+                CartItemId = cartItem.CartItemId,
+                CartId = cartItem.CartId,
+                ProductId = cartItem.ProductId,
+                ItemQuantity = cartItem.ItemQuantity,
+                CreateDate = cartItem.CreateDate,
+                EditDate = cartItem.EditDate
+            };
+
+            return new SuccessDataResult<CartItemResponse>(cartItemResponse, "Sepet detay bilgisi getirildi.");
         }
 
         public IResult DeleteCartItem(int cartItemId)

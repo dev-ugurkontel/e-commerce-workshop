@@ -7,6 +7,7 @@ namespace Business.Abstract
 {
     public interface ICartService : IService<CartRequest, CartResponse>
     {
+        IDataResult<CartItemResponse> GetCartItemByCartItemId(int cartItemId);
         IResult DeleteCartItem(int cartItemId);
     }
 }
