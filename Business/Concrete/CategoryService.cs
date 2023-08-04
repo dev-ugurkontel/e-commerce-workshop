@@ -4,11 +4,6 @@ using DataAccess.EF.Abstract;
 using Entities.Entity;
 using Entities.Surrogate.Request;
 using Entities.Surrogate.Response;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Business.Concrete
 {
@@ -66,39 +61,53 @@ namespace Business.Concrete
 
         public IDataResult<CategoryResponse> Add(CategoryRequest data)
         {
-            var entity = new Category()
+            try
             {
-                CategoryDescription = data.CategoryDescription,
-                EditDate = DateTime.Now,
-                CategoryName = data.CategoryName,
-                CreateDate = DateTime.Now,
-                CategoryStatus = data.CategoryStatus
-            };
+                var entity = new Category()
+                {
+                    CategoryDescription = data.CategoryDescription,
+                    EditDate = DateTime.Now,
+                    CategoryName = data.CategoryName,
+                    CreateDate = DateTime.Now,
+                    CategoryStatus = data.CategoryStatus
+                };
 
-            _categoryRepository.Add(entity);
+                _categoryRepository.Add(entity);
 
-            CategoryResponse categoryResponse = new()
+                CategoryResponse categoryResponse = new()
+                {
+                    CategoryDescription = entity.CategoryDescription,
+                    CategoryName = entity.CategoryName,
+                    CategoryId = entity.CategoryId,
+                    CategoryStatus = entity.CategoryStatus,
+                    CreateDate = entity.CreateDate,
+                    EditDate = entity.EditDate
+                };
+
+                return new SuccessDataResult<CategoryResponse>(categoryResponse, "Kategori başarıyla kaydedildi.");
+            }
+            catch (Exception ex)
             {
-                CategoryDescription = entity.CategoryDescription,
-                CategoryName = entity.CategoryName,
-                CategoryId = entity.CategoryId,
-                CategoryStatus = entity.CategoryStatus,
-                CreateDate = entity.CreateDate,
-                EditDate = entity.EditDate
-            };
-
-            return new SuccessDataResult<CategoryResponse>(categoryResponse, "Kategori başarıyla kaydedildi.");
+                return new ExceptionDataResult<CategoryResponse>(default, ex);
+            }            
         }
 
         public IResult Update(int id, CategoryRequest data)
         {
-            var category = _categoryRepository.Get(c=> c.CategoryId == id);
-            category.CategoryDescription = data.CategoryDescription;
-            category.CategoryName = data.CategoryName;
-            category.CategoryStatus = data.CategoryStatus;
-            category.EditDate = DateTime.Now;
-            _categoryRepository.Update(category);
-            return new SuccessResult("Kategori başarıyla güncellendi");
+            try
+            {
+                var category = _categoryRepository.Get(c => c.CategoryId == id);
+                category.CategoryDescription = data.CategoryDescription;
+                category.CategoryName = data.CategoryName;
+                category.CategoryStatus = data.CategoryStatus;
+                category.EditDate = DateTime.Now;
+                _categoryRepository.Update(category);
+                return new SuccessResult("Kategori başarıyla güncellendi");
+            }
+            catch (Exception ex)
+            {
+                return new ExceptionResult(ex);
+            }            
         }
 
         public IResult Delete(int id)
@@ -107,9 +116,6 @@ namespace Business.Concrete
             _categoryRepository.Delete(category);
             return new SuccessResult("Kategori başarıyla silindi.");
             
-        }
-
-     
-      
+        }           
     }
 }

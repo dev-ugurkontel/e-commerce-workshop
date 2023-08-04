@@ -20,16 +20,25 @@ builder.Services.AddSwaggerGen(c=>
 });
 
 ConnectionConfig.ConnectionString = builder.Configuration.GetConnectionString("ECommerceContext");
-builder.Services.AddScoped<DbContext,ECommerceContext>();
+builder.Services.AddScoped<DbContext, ECommerceContext>();
+
 builder.Services.AddScoped<CategoryRepositoryBase, CategoryRepository>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
+
 builder.Services.AddScoped<CampaignRepositoryBase, CampaignRepository>();
 builder.Services.AddScoped<ICampaignService, CampaignService>();
+
 builder.Services.AddScoped<ProductRepositoryBase, ProductRepository>();
 builder.Services.AddScoped<IProductService, ProductService>();
+
 builder.Services.AddScoped<CartRepositoryBase, CartRepository>();
 builder.Services.AddScoped<CartItemRepositoryBase, CartItemRepository>();
 builder.Services.AddScoped<ICartService, CartService>();
+
+builder.Services.AddScoped<OrderRepositoryBase, OrderRepository>();
+builder.Services.AddScoped<OrderItemRepositoryBase, OrderItemRepository>();
+builder.Services.AddScoped<IOrderService, OrderService>();
+
 builder.Services.AddScoped<IShoppingService, ShoppingService>();
 
 var app = builder.Build();
