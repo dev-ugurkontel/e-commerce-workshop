@@ -15,11 +15,19 @@ namespace WebAPI.Controllers
             _shoppingService = shoppingService;
         }
 
+        [Route("CompleteOrder")]
+        [HttpPost]
+        public IActionResult CompleteOrder(int cartId)
+        {
+            var result = _shoppingService.CompleteOrder(cartId);
+            return Ok(result);
+        }
+
         [Route("AddToCart")]
         [HttpPost]
-        public IActionResult AddToCart(int userId, CartItemRequest cartItemId)
+        public IActionResult AddToCart(int userId, CartItemRequest cartItemRequest)
         {
-            var result = _shoppingService.AddToCart(userId, cartItemId);
+            var result = _shoppingService.AddToCart(userId, cartItemRequest);
             return Ok(result);
         }
 

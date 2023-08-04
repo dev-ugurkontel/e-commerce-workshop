@@ -24,7 +24,7 @@ namespace Business.Concrete
             Order newOrder = new()
             {
                 CartId = orderRequest.CartId,
-                OrderNumber = new Guid().ToString(),
+                OrderNumber = Guid.NewGuid().ToString().ToUpper(),
                 OrderStatus = 1,
                 OrderDate = DateTime.Now,
                 CreateDate = DateTime.Now,
@@ -43,6 +43,7 @@ namespace Business.Concrete
                     ItemPrice = item.ItemPrice,
                     DiscountPrice = item.DiscountPrice,
                     DiscountRate = item.DiscountRate,
+                    ShipDate = DateTime.Now,
                     CreateDate = DateTime.Now,
                     EditDate = DateTime.Now
                 };

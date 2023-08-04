@@ -11,14 +11,12 @@ namespace Business.Concrete
         private readonly IProductService _productService;
         private readonly ICartService _cartService;
         private readonly IOrderService _orderService;
-        private readonly ICampaignService _campaignService;
 
-        public ShoppingService(IProductService productService, ICartService cartService, IOrderService orderService, ICampaignService campaignService)
+        public ShoppingService(IProductService productService, ICartService cartService, IOrderService orderService)
         {
             _productService = productService;
             _cartService = cartService;
             _orderService = orderService;
-            _campaignService = campaignService;
         }
 
         public IDataResult<CartResponse> AddToCart(int userId, CartItemRequest cartItemRequest)
@@ -89,7 +87,7 @@ namespace Business.Concrete
             OrderRequest orderRequest = new()
             {
                 CartId = cartId,
-                OrderItems = new(),
+                OrderItems = new()
             };
 
             foreach (var cartItem in cart.Data.CartItems)
@@ -100,14 +98,19 @@ namespace Business.Concrete
                     return new ErrorDataResult<OrderResponse>(default, "Ürün bulunamadı.");
                 }
 
-                orderRequest.OrderItems.Add(new OrderItemRequest()
+                double totalPrice = product.ProductPrice * cartItem.ItemQuantity;
+                double discountPrice = totalPrice - totalPrice * product.Campaign.CampaignDiscountRate / 100;
+
+                var orderItemRequest = new OrderItemRequest()
                 {
                     ProductId = cartItem.ProductId,
                     ItemQuantity = cartItem.ItemQuantity,
                     ItemPrice = product.ProductPrice * cartItem.ItemQuantity,
                     DiscountRate = product.Campaign.CampaignDiscountRate,
-                    DiscountPrice = product.ProductPrice * cartItem.ItemQuantity * product.Campaign.CampaignDiscountRate / 100,
-                });
+                    DiscountPrice = discountPrice
+                };
+
+                orderRequest.OrderItems.Add(orderItemRequest);
             }
 
             var orderResult = _orderService.CompleteOrder(orderRequest);
