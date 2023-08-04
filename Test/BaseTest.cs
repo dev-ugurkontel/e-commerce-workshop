@@ -1,4 +1,5 @@
-﻿using DataAccess.EF.Concrete;
+﻿using Business.Concrete;
+using DataAccess.EF.Concrete;
 using DataAccess.EF.Contexts;
 
 namespace Test
@@ -13,6 +14,12 @@ namespace Test
         protected readonly OrderRepository _orderRepository;
         protected readonly ProductRepository _productRepository;
 
+        protected readonly CartService _cartService;
+        protected readonly OrderService _orderService;
+        protected readonly ProductService _productService;
+        protected readonly CategoryService _categoryService;
+        protected readonly CampaignService _campaignService;
+
         public BaseTest()
         {
             var dbContext = new ECommerceContext();
@@ -23,6 +30,13 @@ namespace Test
             _orderItemRepository = new OrderItemRepository(dbContext);
             _orderRepository = new OrderRepository(dbContext);
             _productRepository = new ProductRepository(dbContext);
+            
+            _cartService = new CartService(_cartRepository, _cartItemRepository);
+            _productService = new ProductService(_productRepository, _categoryService, _campaignService);
+            _orderService = new OrderService(_orderRepository, _orderItemRepository);
+            _campaignService = new CampaignService(_campaignRepository);
+            _categoryService = new CategoryService(_categoryRepository);
+
         }
 
         protected string GetRandomString()
