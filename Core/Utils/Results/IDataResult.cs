@@ -4,11 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Core.Utils
+namespace Core.Utils.Results
 {
-    public  interface IResult
+    public interface IDataResult<out T> : IResult
     {
-        ResultStatus Status { get; }
-        string Message { get; }
+        T Data { get; }
     }
 }

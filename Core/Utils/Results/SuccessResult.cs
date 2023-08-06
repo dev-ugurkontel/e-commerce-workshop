@@ -4,18 +4,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Core.Utils
+namespace Core.Utils.Results
 {
     public class SuccessResult : Result
     {
-        public SuccessResult(string message): base(ResultStatus.Success,message)
+        public SuccessResult(string message) : base(ResultStatus.Success, message)
         {
-                
+
         }
 
-        public SuccessResult():base(ResultStatus.Success)
+        public SuccessResult() : base(ResultStatus.Success)
         {
-                
+
         }
     }
 }

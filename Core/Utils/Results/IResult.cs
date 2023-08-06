@@ -4,12 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Core.Utils
+namespace Core.Utils.Results
 {
-    public enum ResultStatus
+    public interface IResult
     {
-        Success = 1,
-        Error = 0,
-        Exception = -1
+        ResultStatus Status { get; }
+        string Message { get; }
     }
 }
