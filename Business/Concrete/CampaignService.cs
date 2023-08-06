@@ -1,5 +1,7 @@
 ﻿using Business.Abstract;
+using Business.ValidationRules.FluentValidation;
 using Core.Utils;
+using Core.Validation;
 using DataAccess.EF.Abstract;
 using DataAccess.EF.Concrete;
 using Entities.Entity;
@@ -7,6 +9,7 @@ using Entities.Surrogate.Request;
 using Entities.Surrogate.Response;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,6 +24,8 @@ namespace Business.Concrete
         {
             _campaignRepository = campaignRepository;
         }
+
+        [ValidationAspect(typeof(CampaignValidator))]
         public IDataResult<CampaignResponse> Add(CampaignRequest data)
         {
             var entity = new Campaign()
@@ -101,7 +106,7 @@ namespace Business.Concrete
 
             return new SuccessDataResult<List<CampaignResponse>>(campaignList, "Kampanya bilgileri getirildi.");
         }
-
+        [ValidationAspect(typeof(CampaignValidator))]
         public IResult Update(int id, CampaignRequest data)
         {
             var campaign = _campaignRepository.Get(p => p.CampaignId == id);

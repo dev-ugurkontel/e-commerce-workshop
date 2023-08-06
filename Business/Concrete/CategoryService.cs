@@ -1,5 +1,7 @@
 ﻿using Business.Abstract;
+using Business.ValidationRules.FluentValidation;
 using Core.Utils;
+using Core.Validation;
 using DataAccess.EF.Abstract;
 using Entities.Entity;
 using Entities.Surrogate.Request;
@@ -58,7 +60,7 @@ namespace Business.Concrete
             
             
         }
-
+        [ValidationAspect(typeof(CategoryValidator))]
         public IDataResult<CategoryResponse> Add(CategoryRequest data)
         {
             try
@@ -92,6 +94,7 @@ namespace Business.Concrete
             }            
         }
 
+        [ValidationAspect(typeof(CategoryValidator))]
         public IResult Update(int id, CategoryRequest data)
         {
             try

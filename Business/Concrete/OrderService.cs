@@ -1,5 +1,7 @@
 ﻿using Business.Abstract;
+using Business.ValidationRules.FluentValidation;
 using Core.Utils;
+using Core.Validation;
 using DataAccess.EF.Abstract;
 using DataAccess.EF.Concrete;
 using Entities.Entity;
@@ -19,6 +21,7 @@ namespace Business.Concrete
             _orderItemRepository = orderItemRepository;
         }
 
+        [ValidationAspect(typeof(OrderValidator))]
         public IDataResult<OrderResponse> CompleteOrder(OrderRequest orderRequest)
         {
             Order newOrder = new()
