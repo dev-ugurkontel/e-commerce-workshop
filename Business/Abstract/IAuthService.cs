@@ -1,4 +1,6 @@
-﻿using Core.Utils;
+using Core.Entity.Model;
+using Core.Utils.Results;
+using Core.Utils.Security.JWT;
 using Entities.Surrogate.Request;
 using Entities.Surrogate.Response;
 using System;
@@ -13,5 +15,7 @@ namespace Business.Abstract
     {
         IDataResult<UserResponse> Register(RegisterRequest data);
         IDataResult<UserResponse> Login(LoginRequest data);
+        IResult UserExists(string email);
+        IDataResult<AccessToken> CreateAccessToken(UserTokenModel data);
     }
 }

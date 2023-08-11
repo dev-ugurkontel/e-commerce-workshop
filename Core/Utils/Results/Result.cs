@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Core.Utils
+namespace Core.Utils.Results
 {
     public class Result : IResult
     {
@@ -13,13 +13,13 @@ namespace Core.Utils
             Message = message;
         }
 
-        
+
         public Result(ResultStatus status)
         {
             Status = status;
         }
 
-       
+
 
         public ResultStatus Status { get; }
 
