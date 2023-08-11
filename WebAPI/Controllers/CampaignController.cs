@@ -1,5 +1,5 @@
 ﻿using Business.Abstract;
-using Core.Utils;
+using Core.Utils.Results;
 using Entities.Entity;
 using Entities.Surrogate.Request;
 using Microsoft.AspNetCore.Http;

@@ -1,5 +1,5 @@
 ﻿using Business.Concrete;
-using Core.Utils;
+using Core.Utils.Results;
 using Entities.Surrogate.Request;
 
 namespace Test

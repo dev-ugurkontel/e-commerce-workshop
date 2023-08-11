@@ -1,5 +1,5 @@
 ﻿using Core.Entity.Abstract;
-using Core.Utils;
+using Core.Utils.Results;
 using Microsoft.EntityFrameworkCore.Migrations.Operations;
 using System;
 using System.Collections.Generic;
