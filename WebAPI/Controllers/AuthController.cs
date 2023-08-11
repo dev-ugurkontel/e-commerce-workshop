@@ -1,9 +1,8 @@
 ﻿using Business.Abstract;
-using Entities.Surrogate.Request;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Core.Utils;
 using Core.Entity.Model;
+using Core.Utils.Results;
+using Entities.Surrogate.Request;
+using Microsoft.AspNetCore.Mvc;
 
 namespace WebAPI.Controllers
 {
