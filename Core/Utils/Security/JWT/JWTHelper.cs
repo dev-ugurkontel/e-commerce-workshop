@@ -26,6 +26,11 @@ namespace Core.Utils.Security.JWT
         {
             _accessTokenExpiration = DateTime.Now.AddMinutes(_tokenOptions.AccessTokenExpiration);
             var jwt = CreateSecurityToken(_tokenOptions,user);
+            return new AccessToken
+            {
+                Token = new JwtSecurityTokenHandler().WriteToken(jwt),
+                Expiration = _accessTokenExpiration
+            };
         }
 
         public JwtSecurityToken CreateSecurityToken(TokenOptions options,UserTokenModel user)
