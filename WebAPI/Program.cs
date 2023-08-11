@@ -19,6 +19,10 @@ builder.Services.AddSwaggerGen(c=>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "API Documentation", Version = "v1" });
 });
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("CorsPolicy", builder => builder.WithOrigins("http://localhost:4200").AllowAnyMethod().AllowAnyHeader().AllowCredentials());
+});
 
 ConnectionConfig.ConnectionString = builder.Configuration.GetConnectionString("ECommerceContext");
 builder.Services.AddScoped<DbContext, ECommerceContext>();
@@ -60,9 +64,10 @@ if (app.Environment.IsDevelopment())
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "API Documentation V1");
     });
 }
+app.UseRouting();
 
 app.UseHttpsRedirection();
-
+app.UseCors("CorsPolicy");
 app.UseAuthorization();
 
 app.MapControllers();
