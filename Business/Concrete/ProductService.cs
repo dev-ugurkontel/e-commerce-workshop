@@ -1,5 +1,7 @@
 ﻿using Business.Abstract;
+using Business.ValidationRules.FluentValidation;
 using Core.Utils;
+using Core.Validation;
 using Core.Utils.Results;
 using DataAccess.EF.Abstract;
 using DataAccess.EF.Concrete;
@@ -100,7 +102,7 @@ namespace Business.Concrete
         }
 
 
-
+        [ValidationAspect(typeof(ProductValidator))]
         public IDataResult<ProductResponse> Add(ProductRequest data)
         {
             string fileName = "";
@@ -157,7 +159,7 @@ namespace Business.Concrete
         }
 
 
-
+        [ValidationAspect(typeof(ProductValidator))]
         public IResult Update(int id, ProductRequest data)
         {
             var product = _productRepository.Get(p => p.ProductId == id);

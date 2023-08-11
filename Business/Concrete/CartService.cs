@@ -1,5 +1,7 @@
 ﻿using Business.Abstract;
+using Business.ValidationRules.FluentValidation;
 using Core.Utils;
+using Core.Validation;
 using Core.Utils.Results;
 using DataAccess.EF.Abstract;
 using Entities.Entity;
@@ -18,7 +20,7 @@ namespace Business.Concrete
             _cartRepository = cartRepository;
             _cartItemRepository = cartItemRepository;
         }
-
+        [ValidationAspect(typeof(CartValidator))]
         public IDataResult<CartResponse> Add(CartRequest data)
         {
             if (data is null)
@@ -197,6 +199,7 @@ namespace Business.Concrete
             return new SuccessDataResult<List<CartResponse>>(carts, "Sepet bilgileri getirildi.");
         }
 
+        [ValidationAspect(typeof(CartValidator))]
         public IResult Update(int id, CartRequest data)
         {
             if (data is null)

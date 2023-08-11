@@ -1,5 +1,7 @@
 ﻿using Business.Abstract;
+using Business.ValidationRules.FluentValidation;
 using Core.Utils;
+using Core.Validation;
 using Core.Utils.Results;
 using DataAccess.EF.Abstract;
 using Entities.Entity;
@@ -20,6 +22,8 @@ namespace Business.Concrete
         {
             _userRepository = userRepository;
         }
+
+        [ValidationAspect(typeof(UserValidator))]
         public IDataResult<UserResponse> Add(UserRequest data)
         {
             var entity = new User()
@@ -67,8 +71,8 @@ namespace Business.Concrete
             throw new NotImplementedException();
         }
 
-     
 
+        [ValidationAspect(typeof(UserValidator))]
         public IResult Update(int id, UserRequest data)
         {
             throw new NotImplementedException();
