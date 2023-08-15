@@ -15,8 +15,8 @@ namespace Entities.Surrogate.Request
         public int CampaignStatus { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
-        public DateTime CreateDate { get; set; }
-        public DateTime EditDate { get; set; }
+        //public DateTime CreateDate { get; set; }
+        //public DateTime EditDate { get; set; }
 
 
     }

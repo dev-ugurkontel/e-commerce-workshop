@@ -18,7 +18,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet]
-        [Route("List_Category")]
+        [Route("List_Category")]    
         public IActionResult List_Category()
         {
             var result = _categoryService.GetAll();

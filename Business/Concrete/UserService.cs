@@ -23,7 +23,6 @@ namespace Business.Concrete
             _userRepository = userRepository;
         }
 
-        [ValidationAspect(typeof(UserValidator))]
         public IDataResult<UserResponse> Add(UserRequest data)
         {
             var entity = new User()
@@ -72,7 +71,6 @@ namespace Business.Concrete
         }
 
 
-        [ValidationAspect(typeof(UserValidator))]
         public IResult Update(int id, UserRequest data)
         {
             throw new NotImplementedException();
@@ -81,20 +79,25 @@ namespace Business.Concrete
         public LoginResponse GetByMail(string email)
         {
             var user = _userRepository.Get(x => x.UserEmail == email);
-            LoginResponse loginResponse = new LoginResponse()
-            {
-                UserEmail = user.UserEmail,
-                UserFirstName = user.UserName,
-                UserAddress = user.UserAddress,
-                UserLastName = user.UserLastName,
-                UserName = user.UserName,
-                UserRole = user.UserRole,
-                UserId = user.UserId,
-                UserPasswordHash = user.UserPasswordHash,
-                UserPasswordSalt = user.UserPasswordSalt
-            };
 
-            return loginResponse;
+            if(user != null)
+            {
+                LoginResponse loginResponse = new LoginResponse()
+                {
+                    UserEmail = user.UserEmail,
+                    UserFirstName = user.UserName,
+                    UserAddress = user.UserAddress,
+                    UserLastName = user.UserLastName,
+                    UserName = user.UserName,
+                    UserRole = user.UserRole,
+                    UserId = user.UserId,
+                    UserPasswordHash = user.UserPasswordHash,
+                    UserPasswordSalt = user.UserPasswordSalt
+                };
+
+                return loginResponse;
+            }
+            return null;
 
            
         }

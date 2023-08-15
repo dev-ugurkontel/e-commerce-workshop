@@ -22,7 +22,6 @@ namespace Business.Concrete
             _orderService = orderService;
         }
 
-        [ValidationAspect(typeof(CartItemValidator))]
         public IDataResult<CartResponse> AddToCart(int userId, CartItemRequest cartItemRequest)
         {
             var product = _productService.Get(cartItemRequest.ProductId).Data;
@@ -69,7 +68,6 @@ namespace Business.Concrete
             return new SuccessDataResult<CartResponse>(cartResponse, "Ürün sepete eklendi.");
         }
 
-        [ValidationAspect(typeof(CartItemValidator))]
         public IDataResult<CartResponse> UpdateCart(int userId, CartItemRequest cartItemRequest)
         {
             //TODO: Adet güncelleme işlemleri yapılmalıdır.

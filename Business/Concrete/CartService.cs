@@ -20,7 +20,6 @@ namespace Business.Concrete
             _cartRepository = cartRepository;
             _cartItemRepository = cartItemRepository;
         }
-        [ValidationAspect(typeof(CartValidator))]
         public IDataResult<CartResponse> Add(CartRequest data)
         {
             if (data is null)
@@ -199,7 +198,6 @@ namespace Business.Concrete
             return new SuccessDataResult<List<CartResponse>>(carts, "Sepet bilgileri getirildi.");
         }
 
-        [ValidationAspect(typeof(CartValidator))]
         public IResult Update(int id, CartRequest data)
         {
             if (data is null)

@@ -26,7 +26,6 @@ namespace Business.Concrete
             _campaignRepository = campaignRepository;
         }
 
-        [ValidationAspect(typeof(CampaignValidator))]
         public IDataResult<CampaignResponse> Add(CampaignRequest data)
         {
             var entity = new Campaign()
@@ -107,7 +106,6 @@ namespace Business.Concrete
 
             return new SuccessDataResult<List<CampaignResponse>>(campaignList, "Kampanya bilgileri getirildi.");
         }
-        [ValidationAspect(typeof(CampaignValidator))]
         public IResult Update(int id, CampaignRequest data)
         {
             var campaign = _campaignRepository.Get(p => p.CampaignId == id);

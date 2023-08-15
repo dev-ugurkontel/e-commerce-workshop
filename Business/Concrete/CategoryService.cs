@@ -61,7 +61,6 @@ namespace Business.Concrete
             
             
         }
-        [ValidationAspect(typeof(CategoryValidator))]
         public IDataResult<CategoryResponse> Add(CategoryRequest data)
         {
             try
@@ -95,7 +94,6 @@ namespace Business.Concrete
             }            
         }
 
-        [ValidationAspect(typeof(CategoryValidator))]
         public IResult Update(int id, CategoryRequest data)
         {
             try

@@ -17,6 +17,8 @@ namespace WebAPI.Controllers
             _authService = authService;
         }
 
+        [Route("Login")]
+        [HttpPost]
         public ActionResult Login(LoginRequest data)
         {
             var userToLogin = _authService.Login(data);
@@ -45,6 +47,9 @@ namespace WebAPI.Controllers
             return BadRequest(result.Message);
         }
 
+        [Route("Register")]
+        [HttpPost]
+      
         public ActionResult Register(RegisterRequest data)
         {
             var userExists = _authService.UserExists(data.UserEmail);

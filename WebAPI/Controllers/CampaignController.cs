@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace WebAPI.Controllers
 {
-    [Route("api/v1/category")]
+    [Route("api/v1/campaign")]
     [ApiController]
     public class CampaignController : ControllerBase
     {

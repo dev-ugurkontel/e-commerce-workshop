@@ -19,8 +19,10 @@ namespace Core.Utils.Security.JWT
         public JWTHelper(IConfiguration configuration)
         {
             Configuration = configuration;
-            _tokenOptions = Configuration.GetSection("TokenOptions") as TokenOptions;
-            
+            //_tokenOptions = Configuration.GetSection("TokenOptions") as TokenOptions;
+            //_tokenOptions = Configuration.GetValue<TokenOptions>("TokenOptions");
+            _tokenOptions = Configuration.GetSection("TokenOptions").Get<TokenOptions>();
+
         }
         public AccessToken CreateToken(UserTokenModel user)
         {

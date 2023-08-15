@@ -22,7 +22,6 @@ namespace Business.Concrete
             _orderItemRepository = orderItemRepository;
         }
 
-        [ValidationAspect(typeof(OrderValidator))]
         public IDataResult<OrderResponse> CompleteOrder(OrderRequest orderRequest)
         {
             Order newOrder = new()
