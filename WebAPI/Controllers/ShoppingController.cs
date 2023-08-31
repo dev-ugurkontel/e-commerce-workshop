@@ -25,9 +25,17 @@ namespace WebAPI.Controllers
 
         [Route("AddToCart")]
         [HttpPost]
-        public IActionResult AddToCart(int userId, CartItemRequest cartItemRequest)
+        public IActionResult AddToCart(int userId, [FromBody] CartItemRequest cartItemRequest)
         {
             var result = _shoppingService.AddToCart(userId, cartItemRequest);
+            return Ok(result);
+        }
+
+        [Route("GetCart")]
+        [HttpGet]
+        public IActionResult GetCart(int cartId)
+        {
+            var result = _shoppingService.GetCart(cartId);
             return Ok(result);
         }
 

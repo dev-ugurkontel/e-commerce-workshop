@@ -89,7 +89,7 @@ namespace Business.Concrete
             return new SuccessDataResult<CampaignResponse>(campaignResponse, "Kampanya bilgisi getirildi.");
         }
 
-        public IDataResult<List<CampaignResponse>> GetAll()
+        public IDataResult<List<CampaignResponse>> GetAll(int page = 0, int pageSize = 0)
         {
             var campaignList = _campaignRepository.GetAll().Select(c => new CampaignResponse()
             {

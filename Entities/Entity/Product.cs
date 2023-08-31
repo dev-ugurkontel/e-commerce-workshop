@@ -15,7 +15,6 @@ namespace Entities.Entity
         public string?  ProductDescription { get; set; }
         public int  ProductStock { get; set; }
         public double  ProductPrice { get; set; }
-        public string?  ProductImagePath { get; set; }
         public int  ProductCategoryId { get; set; }
         public int ProductCampaignId { get; set; }
         public int ProductStatus { get; set; }

@@ -174,7 +174,7 @@ namespace Business.Concrete
             return new SuccessDataResult<CartResponse>(cartResponse, "Sepet bilgisi getirildi.");
         }
 
-        public IDataResult<List<CartResponse>> GetAll()
+        public IDataResult<List<CartResponse>> GetAll(int page = 0, int pageSize = 0)
         {
             var carts = _cartRepository.GetAll().Select(x => new CartResponse()
             {

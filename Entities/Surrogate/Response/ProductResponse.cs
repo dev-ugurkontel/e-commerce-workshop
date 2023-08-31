@@ -15,7 +15,7 @@ namespace Entities.Surrogate.Response
         public string ProductDescription { get; set; }
         public int ProductStock { get; set; }
         public double ProductPrice { get; set; }
-        public string ProductImagePath { get; set; }
+        public List<ProductFileResponse> Files { get; set; }
         public CategoryResponse Category { get; set; }
         public CampaignResponse Campaign { get; set; }
         public int ProductStatus { get; set; }

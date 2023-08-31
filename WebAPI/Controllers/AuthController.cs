@@ -24,7 +24,7 @@ namespace WebAPI.Controllers
             var userToLogin = _authService.Login(data);
             if(userToLogin.Status == ResultStatus.Error)
             {
-                return BadRequest(userToLogin.Message);
+                return BadRequest(userToLogin);
             }
             var userTokenModel = new UserTokenModel()
             {
@@ -41,10 +41,10 @@ namespace WebAPI.Controllers
             var result = _authService.CreateAccessToken(userTokenModel);
             if (result.Status == ResultStatus.Success)
             {
-                return Ok(result.Data);
+                return Ok(result);
             } 
 
-            return BadRequest(result.Message);
+            return BadRequest(result);
         }
 
         [Route("Register")]
@@ -74,10 +74,10 @@ namespace WebAPI.Controllers
 
             if (result.Status == ResultStatus.Success)
             {
-                return Ok(result.Data);
+                return Ok(result);
             }
 
-            return BadRequest(result.Message);
+            return BadRequest(result);
 
 
         }

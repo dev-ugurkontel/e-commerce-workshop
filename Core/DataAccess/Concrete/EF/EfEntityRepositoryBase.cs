@@ -60,6 +60,7 @@ namespace Core.DataAccess.Concrete.EF
             var deleteEntity = _db.Entry(entity);
             deleteEntity.State = EntityState.Deleted;
             _db.SaveChanges();
+      
 
             //ALTERNATIF
             //_db.Set<TEntity>().Remove(entity);

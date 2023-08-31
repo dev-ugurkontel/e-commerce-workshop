@@ -1,4 +1,5 @@
 ﻿using Core.Entity.Model;
+using Core.Utils.Enums;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
@@ -52,12 +53,15 @@ namespace Core.Utils.Security.JWT
 
         private IEnumerable<Claim> SetClaims(UserTokenModel user)
         {
-            var claims = new List<Claim>();
-            claims.Add(new Claim("Name", user.UserFirstName));
-            claims.Add(new Claim("LastName", user.UserLastName));
-            claims.Add(new Claim("Email", user.UserEmail));
+            var claims = new List<Claim>
+            {
+                new Claim("Id", (user.UserId).ToString()),
+                new Claim("Name", user.UserFirstName),
+                new Claim("LastName", user.UserLastName),
+                new Claim("Email", user.UserEmail),
+                new Claim("Role", ((Roles)user.UserRole).ToString())
+            };
             return claims;
-
 
         }
     }

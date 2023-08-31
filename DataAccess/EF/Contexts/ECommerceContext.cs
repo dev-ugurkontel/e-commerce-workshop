@@ -23,5 +23,6 @@ namespace DataAccess.EF.Contexts
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderItem> OrderItems { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<ProductFile> ProductFiles { get; set; }
     }
 }

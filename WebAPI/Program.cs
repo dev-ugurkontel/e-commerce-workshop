@@ -33,6 +33,9 @@ builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<CampaignRepositoryBase, CampaignRepository>();
 builder.Services.AddScoped<ICampaignService, CampaignService>();
 
+builder.Services.AddScoped<ProductFileRepositoryBase, ProductFileRepository>();
+builder.Services.AddScoped<IProductFileService, ProductFileService>();
+
 builder.Services.AddScoped<ProductRepositoryBase, ProductRepository>();
 builder.Services.AddScoped<IProductService, ProductService>();
 

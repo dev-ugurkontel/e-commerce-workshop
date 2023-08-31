@@ -19,9 +19,9 @@ namespace WebAPI.Controllers
 
         [HttpGet]
         [Route("List_Product")]
-        public IActionResult List_Product()
+        public IActionResult List_Product(int page = 1, int pageSize = 4)
         {
-            var result = _productService.GetAll();
+            var result = _productService.GetAll(page, pageSize);
             if (result.Status == ResultStatus.Success)
             {
                 return Ok(result);
@@ -71,7 +71,7 @@ namespace WebAPI.Controllers
 
         [Route("Update_Product/{id}")]
         [HttpPut]
-        public IActionResult Update_Product(int id, ProductRequest product)
+        public IActionResult Update_Product(int id, [FromForm] ProductRequest product)
         {
             _productService.Update(id, product);
             return Ok(product);

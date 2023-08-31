@@ -66,7 +66,8 @@ namespace Business.Concrete
                 UserId = userToCheck.UserId,
                 UserLastName = userToCheck.UserLastName,
                 UserName = userToCheck.UserName,
-                UserRole = (int)Roles.User,
+                UserRole = userToCheck.UserRole,
+                
             };
             return new SuccessDataResult<UserResponse>(user, "Başarılı Giriş");
         }

@@ -22,56 +22,108 @@ namespace Business.Concrete
         private readonly ProductRepositoryBase _productRepository;
         private readonly ICategoryService _categoryService;
         private readonly ICampaignService _campaignService;
+        private readonly IProductFileService _productFileService;
 
-        public ProductService(ProductRepositoryBase productRepository, ICategoryService categoryService, ICampaignService campaignService)
+        public ProductService(ProductRepositoryBase productRepository, ICategoryService categoryService, ICampaignService campaignService, IProductFileService productFileService)
         {
             _productRepository = productRepository;
             _categoryService = categoryService;
             _campaignService = campaignService;
+            _productFileService = productFileService;
         }
 
-        public IDataResult<List<ProductResponse>> GetAll()
+        public IDataResult<PageResponse<ProductResponse>> GetAll(int page = 0, int pageSize = 0)
         {
-
-
-            
-            var productList = _productRepository.GetAll().Select(p=> new ProductResponse()
+            if (page != 0 && pageSize != 0)
             {
-                ProductId = p.ProductId,
-                CreateDate = p.CreateDate,
-                ProductPrice = p.ProductPrice,
-                ProductName = p.ProductName,
-                ProductDescription = p.ProductDescription,
-                ProductStock        = p.ProductStock,
-                ProductImagePath = p.ProductImagePath,  
-                ProductStatus = p.ProductStatus,    
-                ProductUrl  = p.ProductUrl,
-                EditDate = p.EditDate,  
-                Campaign = _campaignService.Get(p.ProductCampaignId).Data,
-                Category = _categoryService.Get(p.ProductCategoryId).Data
-                
-            }).ToList();
+                var totalCount = _productRepository.GetAll().Count;
+                var totalPages = (int)Math.Ceiling((decimal)totalCount / pageSize);
 
-            return new SuccessDataResult<List<ProductResponse>>(productList, "Ürün bilgileri getirildi.");
+
+
+                var productList = _productRepository.GetAll().Select(p => new ProductResponse()
+                {
+                    ProductId = p.ProductId,
+                    CreateDate = p.CreateDate,
+                    ProductPrice = p.ProductPrice,
+                    ProductName = p.ProductName,
+                    ProductDescription = p.ProductDescription,
+                    ProductStock = p.ProductStock,
+                    ProductStatus = p.ProductStatus,
+                    ProductUrl = p.ProductUrl,
+                    EditDate = p.EditDate,
+                    Campaign = _campaignService.Get(p.ProductCampaignId).Data,
+                    Category = _categoryService.Get(p.ProductCategoryId).Data,
+                    Files = _productFileService.GetByProductId(p.ProductId).Data
+
+                }).Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
+
+
+                var pageResponse = new PageResponse<ProductResponse>()
+                {
+                    ActivePage = page,
+                    PageSize = pageSize,
+                    Data = productList,
+                    TotalPages = totalPages,
+                    TotalRecords = totalCount
+                };
+
+               
+                return new SuccessDataResult<PageResponse<ProductResponse>>(pageResponse, "Ürün bilgileri getirildi.");
+            }
+            else
+            {
+                var productList = _productRepository.GetAll().Select(p => new ProductResponse()
+                {
+                    ProductId = p.ProductId,
+                    CreateDate = p.CreateDate,
+                    ProductPrice = p.ProductPrice,
+                    ProductName = p.ProductName,
+                    ProductDescription = p.ProductDescription,
+                    ProductStock = p.ProductStock,
+                    Files = _productFileService.GetByProductId(p.ProductId).Data,
+                    ProductStatus = p.ProductStatus,
+                    ProductUrl = p.ProductUrl,
+                    EditDate = p.EditDate,
+                    Campaign = _campaignService.Get(p.ProductCampaignId).Data,
+                    Category = _categoryService.Get(p.ProductCategoryId).Data
+
+                }).ToList();
+
+                var pageResponse = new PageResponse<ProductResponse>()
+                {
+                    ActivePage = page,
+                    PageSize = pageSize,
+                    Data = productList,
+                    TotalPages = 0,
+                    TotalRecords = 0
+                };
+
+                return new SuccessDataResult<PageResponse<ProductResponse>>(pageResponse, "Ürün bilgileri getirildi.");
+
+            }
+
         }
 
         public IDataResult<List<ProductResponse>> GetByCategoryId(int id)
         {
 
-            var productList = _productRepository.GetAll(p=> p.ProductCategoryId == id).Select(p => new ProductResponse()
+            var productList = _productRepository.GetAll(p => p.ProductCategoryId == id).Select(p => new ProductResponse()
             {
                 ProductId = p.ProductId,
                 CreateDate = p.CreateDate,
                 ProductPrice = p.ProductPrice,
                 ProductName = p.ProductName,
                 ProductDescription = p.ProductDescription,
+                Files = _productFileService.GetByProductId(p.ProductId).Data,
                 ProductStock = p.ProductStock,
-                ProductImagePath = p.ProductImagePath,
                 ProductStatus = p.ProductStatus,
                 ProductUrl = p.ProductUrl,
                 EditDate = p.EditDate,
                 Campaign = _campaignService.Get(p.ProductCampaignId).Data,
-                Category = _categoryService.Get(p.ProductCategoryId).Data
+                Category = _categoryService.Get(p.ProductCategoryId).Data,
 
             }).ToList();
 
@@ -80,69 +132,61 @@ namespace Business.Concrete
 
         public IDataResult<ProductResponse> Get(int id)
         {
+
             var product = _productRepository.Get(p => p.ProductId == id);
             // Kategori nesnesi boş gelme durumu değerlendirilecek.
-            var productResponse = new ProductResponse() 
+            var productResponse = new ProductResponse()
             {
-                ProductStatus = product.ProductStatus,                    
+                ProductStatus = product.ProductStatus,
                 ProductUrl = product.ProductUrl,
-                ProductImagePath = product.ProductImagePath,
-                CreateDate  = product.CreateDate,
+                Files = _productFileService.GetByProductId(product.ProductId).Data,
+                CreateDate = product.CreateDate,
                 ProductPrice = product.ProductPrice,
                 ProductId = product.ProductId,
                 ProductName = product.ProductName,
-                EditDate= product.EditDate,
+                EditDate = product.EditDate,
                 ProductDescription = product.ProductDescription,
                 ProductStock = product.ProductStock,
                 Campaign = _campaignService.Get(product.ProductCampaignId).Data,
-                Category = _categoryService.Get(product.ProductCategoryId).Data 
+                Category = _categoryService.Get(product.ProductCategoryId).Data
             };
 
             return new SuccessDataResult<ProductResponse>(productResponse, "Ürün bilgisi getirildi.");
         }
 
-
         public IDataResult<ProductResponse> Add(ProductRequest data)
         {
-            string fileName = "";
-            string fileExtension = "";
-            string filePath = "";
-
-            if (data.File != null && data.File.Length > 0)
-            {
-                fileExtension = Path.GetExtension(data.File.FileName);
-                fileName = Guid.NewGuid() + fileExtension;
-                filePath = Path.Combine("Files", fileName);
-
-                using(FileStream fileStream = new FileStream(filePath, FileMode.Create))
-                {
-                    data.File.CopyTo(fileStream);
-                }
-            }
-
-
+ 
             var entity = new Product()
             {
-                ProductCategoryId = data.ProductCategoryId, 
-                ProductDescription= data.ProductDescription,
+                ProductCategoryId = data.ProductCategoryId,
+                ProductDescription = data.ProductDescription,
                 CreateDate = DateTime.Now,
                 EditDate = DateTime.Now,
                 ProductPrice = data.ProductPrice,
                 ProductCampaignId = data.ProductCampaignId,
                 ProductStatus = data.ProductStatus,
-                ProductImagePath = filePath,
                 ProductStock = data.ProductStock,
-                ProductName= data.ProductName,
+                ProductName = data.ProductName,
                 ProductUrl = Guid.NewGuid().ToString()
             };
 
+            
             _productRepository.Add(entity);
+
+            var fileRequest = new ProductFileRequest()
+            {
+                ProductId = entity.ProductId,
+                File = data.Files
+            };
+
+            _productFileService.Add(fileRequest);
 
             ProductResponse productResponse = new()
             {
                 ProductStatus = entity.ProductStatus,
                 ProductUrl = entity.ProductUrl,
-                ProductImagePath = entity.ProductImagePath,
+                Files = _productFileService.GetByProductId(entity.ProductId).Data,
                 CreateDate = entity.CreateDate,
                 ProductPrice = entity.ProductPrice,
                 ProductId = entity.ProductId,
@@ -157,19 +201,59 @@ namespace Business.Concrete
             return new SuccessDataResult<ProductResponse>(productResponse, "Ürün kaydedildi.");
         }
 
-
         public IResult Update(int id, ProductRequest data)
         {
+            var oldProduct = _productRepository.Get(p => p.ProductId == id);
+
+            //foreach (var path in oldProduct.ProductImagePaths)
+            //{
+            //    if (File.Exists(path))
+            //        File.Delete(path);
+            //}
+
+
+            string fileName = "";
+            string fileExtension = "";
+            string filePath = "";
+            string[] paths = { };
+
+            if (data.Files != null)
+            {
+                foreach (var file in data.Files)
+                {
+                    if (file.Length > 0)
+                    {
+                        fileExtension = Path.GetExtension(file.FileName);
+                        fileName = Guid.NewGuid() + fileExtension;
+                        filePath = Path.Combine("Files", fileName);
+                        paths.Append(filePath);
+
+
+                        using (FileStream fileStream = new FileStream(filePath, FileMode.Create))
+                        {
+                            file.CopyTo(fileStream);
+                        }
+
+
+                    }
+
+                }
+
+            }
+
+
+
+
             var product = _productRepository.Get(p => p.ProductId == id);
-                product.ProductCategoryId = data.ProductCategoryId; 
-                product.ProductDescription = data.ProductDescription;                
-                product.EditDate = DateTime.Now;
-                product.ProductPrice = data.ProductPrice;
-                product.ProductCampaignId = data.ProductCampaignId;
-                product.ProductStatus = data.ProductStatus;
-                product.ProductImagePath = data.ProductImagePath;
-                product.ProductStock = data.ProductStock;
-                product.ProductName = data.ProductName;
+            product.ProductCategoryId = data.ProductCategoryId;
+            product.ProductDescription = data.ProductDescription;
+            product.EditDate = DateTime.Now;
+            product.ProductPrice = data.ProductPrice;
+            product.ProductCampaignId = data.ProductCampaignId;
+            product.ProductStatus = data.ProductStatus;
+            //product.ProductImagePaths = paths;
+            product.ProductStock = data.ProductStock;
+            product.ProductName = data.ProductName;
             _productRepository.Update(product);
             return new SuccessResult("Ürün bilgileri güncellendi.");
 
@@ -178,12 +262,12 @@ namespace Business.Concrete
         public IResult Delete(int id)
         {
             var product = _productRepository.Get(p => p.ProductId == id);
+            _productFileService.Delete(id);
+
             _productRepository.Delete(product);
             return new SuccessResult("Ürün Silindi.");
 
         }
-
-       
 
     }
 }

@@ -17,7 +17,7 @@ namespace Business.Concrete
         {
                 _categoryRepository = categoryRepository;
         }
-        public IDataResult<List<CategoryResponse>> GetAll()
+        public IDataResult<List<CategoryResponse>> GetAll(int page = 0, int pageSize = 0)
         {
             var categoryList = _categoryRepository.GetAll().Select(c=> new CategoryResponse()
             {

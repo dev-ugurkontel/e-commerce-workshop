@@ -65,7 +65,7 @@ namespace Business.Concrete
             throw new NotImplementedException();
         }
 
-        public IDataResult<List<UserResponse>> GetAll()
+        public IDataResult<List<UserResponse>> GetAll(int page = 0, int pageSize = 0)
         {
             throw new NotImplementedException();
         }

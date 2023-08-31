@@ -12,7 +12,8 @@ namespace Core.Business.Abstract
     public interface IService<TRequest,TResponse>  where TRequest : ISurrogate, new()
                                                    where TResponse : ISurrogate, new()
     {
-        IDataResult<List<TResponse>> GetAll();
+        IDataResult<List<TResponse>> GetAll(int page = 0, int pageSize = 0);
+        //IDataResult<List<TResponse>> GetAll();
         IDataResult<TResponse> Get(int id);
         IDataResult<TResponse> Add(TRequest data);
         IResult Update(int id,TRequest data);

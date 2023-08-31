@@ -48,7 +48,7 @@ namespace Business.Concrete
                 ProductDescription = product.ProductDescription,
                 ProductPrice = product.ProductPrice,
                 ProductStatus = product.ProductStatus,
-                ProductImagePath = product.ProductImagePath,
+                //ProductImagePaths = product.ProductImagePaths,
                 ProductName = product.ProductName
             };
 
@@ -106,7 +106,6 @@ namespace Business.Concrete
 
                 var orderItemRequest = new OrderItemRequest()
                 {
-                    ProductId = cartItem.ProductId,
                     ItemQuantity = cartItem.ItemQuantity,
                     ItemPrice = product.ProductPrice * cartItem.ItemQuantity,
                     DiscountRate = product.Campaign.CampaignDiscountRate,
@@ -126,6 +125,22 @@ namespace Business.Concrete
 
             return new SuccessDataResult<OrderResponse>(default, "Sipariş tamamlandı.");
         }     
+
+
+        public IDataResult<CartResponse> GetCart(int cartId)
+        {
+            var cart = _cartService.Get(cartId).Data;
+            if (cart is null)
+            {
+                return new ErrorDataResult<CartResponse>(default, "Sepet bulunamadı.");
+            }
+
+            if (cart.CartItems.Count == 0)
+            {
+                return new ErrorDataResult<CartResponse>(default, "Sepetinizde ürün bulunmamaktadır.");
+            }
+            return new SuccessDataResult<CartResponse>(cart, "Sepet bilgisi getirildi.");
+        }
 
         public IResult RemoveFromCart(int cartItemId)
         {
@@ -168,7 +183,7 @@ namespace Business.Concrete
                 ProductDescription = product.ProductDescription,
                 ProductPrice = product.ProductPrice,
                 ProductStatus = product.ProductStatus,
-                ProductImagePath = product.ProductImagePath,
+                //ProductImagePaths = product.ProductImagePaths,
                 ProductName = product.ProductName
             };
 
@@ -210,7 +225,7 @@ namespace Business.Concrete
                         ProductDescription = product.ProductDescription,
                         ProductPrice = product.ProductPrice,
                         ProductStatus = product.ProductStatus,
-                        ProductImagePath = product.ProductImagePath,
+                        //ProductImagePaths = product.ProductImagePaths,
                         ProductName = product.ProductName
                     };
 

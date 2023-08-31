@@ -41,7 +41,7 @@ namespace Business.Concrete
                 OrderItem newOrderItem = new()
                 {
                     OrderId = newOrder.OrderId,
-                    ProductId = item.ProductId,
+           
                     ItemQuantity = item.ItemQuantity,
                     ItemPrice = item.ItemPrice,
                     DiscountPrice = item.DiscountPrice,
